@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-
     
     public int m_Rows, m_Col;
     public float m_TileSize = 1;// to manage the spacing between
@@ -48,6 +47,7 @@ public class GridManager : MonoBehaviour
             if (m_Grid2.GetGridObject(pos) != null)
             {
                 print(m_Grid2.GetGridObject(pos).GetTileSprite());
+                EventManager.OnGridUpdated();
                 m_Grid2.GetGridObject(pos).SetTile(pos, Tile.TileMovementType.WALKABLE, Tile.TilemapSprite.BACKGROUND);
                 m_TilemapVisual.SetIleVisual(m_Grid2.GetGridObject(pos),m_Grid2.GetWorldPosition(x,y));
                 //m_Grid2.SetGridObject(pos,);
