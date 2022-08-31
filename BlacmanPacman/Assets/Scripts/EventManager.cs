@@ -1,0 +1,10 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
+
+public static class EventManager
+{
+    public static event UnityAction UpdateGrid;
+    public static void OnGridUpdated() => UpdateGrid?.Invoke();
+}
