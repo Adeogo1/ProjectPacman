@@ -27,7 +27,7 @@ public class GridManager : MonoBehaviour
         //GenerateGrid2();
         //GenerateGrid3();
         GenerateGrid4();
-        m_TilemapVisual.SetGrid(m_Grid2);
+        //m_TilemapVisual.SetGrid(m_Grid2);
     }
 
 
@@ -46,15 +46,15 @@ public class GridManager : MonoBehaviour
             m_Grid2.GetXY(pos, out var x, out var y);
             if (m_Grid2.GetGridObject(pos) != null)
             {
-                print(m_Grid2.GetGridObject(pos).GetTileSprite());
-                EventManager.OnGridUpdated();
-                m_Grid2.GetGridObject(pos).SetTile(pos, Tile.TileMovementType.WALKABLE, Tile.TilemapSprite.BACKGROUND);
-                m_TilemapVisual.SetIleVisual(m_Grid2.GetGridObject(pos),m_Grid2.GetWorldPosition(x,y));
+                //print(m_Grid2.GetGridObject(pos).GetTileSprite());
+                //EventManager.OnGridUpdated();
+                //m_Grid2.GetGridObject(pos).SetTile(pos, Tile.TileMovementType.WALKABLE, Tile.TilemapSprite.BACKGROUND);
+                //m_TilemapVisual.SetIleVisual(m_Grid2.GetGridObject(pos),m_Grid2.GetWorldPosition(x,y));
                 //m_Grid2.SetGridObject(pos,);
             }
 
 
-            print(m_Grid2.GetGridObject(pos).GetTileSprite()); 
+            //print(m_Grid2.GetGridObject(pos).GetTileSprite()); 
 
         }
     }

@@ -20,8 +20,11 @@ public class Grid2 <TGridObject>
         m_gridArray = new TGridObject[m_width, m_height];
         float gridWidth = m_width * m_CellSize;
         float gridHeight = m_height * m_CellSize;
-        m_OriginPosition = new Vector3(_originPos.x - gridWidth/2 + _cellSize/2, _originPos.y - gridHeight/2 +_cellSize/2);
+        m_OriginPosition = new Vector3((_originPos.x - gridWidth/2) + _cellSize/2, (_originPos.y - gridHeight/2) +_cellSize/2);
+        //m_OriginPosition = new Vector3(m_OriginPosition.x - m_CellSize / 2, m_OriginPosition.y - m_CellSize / 2);
+        //m_OriginPosition = _originPos;
         
+       
         for (int row = 0; row < m_gridArray.GetLength(0); row++)
         {
             for (int col = 0; col < m_gridArray.GetLength(1); col++)
@@ -35,14 +38,16 @@ public class Grid2 <TGridObject>
         }
         
         Debug.DrawLine(GetWorldPosition(0,m_height), GetWorldPosition(m_width,m_height), Color.white,100);
-        Debug.DrawLine(GetWorldPosition(m_width,0), GetWorldPosition(m_width,m_height), Color.white,100);
+       Debug.DrawLine(GetWorldPosition(m_width,0), GetWorldPosition(m_width,m_height), Color.white,100);
 
         
     }
 
     public Vector3 GetWorldPosition(int x, int y)
     {
-        return new Vector3(x, y) * m_CellSize + m_OriginPosition;
+        Vector3 pos = new Vector3(x, y) * m_CellSize + m_OriginPosition;
+        //pos = new Vector3(pos.x - m_CellSize / 2, pos.y - m_CellSize / 2);
+        return pos;
     }
 
     public void GetXY(Vector3 worldPos, out int x, out int y)
@@ -107,5 +112,15 @@ public class Grid2 <TGridObject>
         int x, y;
         GetXY(worldPos,out x, out y);
         return GetGridObject(x, y);
+    }
+
+    public float GetCellSize()
+    {
+        return m_CellSize;
+    }
+
+    public int GridObjectAmount()
+    {
+        return m_width * m_height;
     }
 }

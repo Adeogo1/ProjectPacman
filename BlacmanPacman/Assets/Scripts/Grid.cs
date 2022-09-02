@@ -7,7 +7,7 @@ public class Grid
     private int m_width;
     private int m_height;
     private float m_CellSize;
-    public Tile[,] m_gridArray;
+    public int[,] m_gridArray;
     public Vector3 m_OriginPosition;
 
     public Grid(int _width, int _height, float _cellSize, Vector3 _originPos)
@@ -15,7 +15,7 @@ public class Grid
         m_width = _width;
         m_height = _height;
         m_CellSize = _cellSize;
-        m_gridArray = new Tile[m_width, m_height];
+        m_gridArray = new int[m_width, m_height];
         float gridWidth = m_width * m_CellSize;
         float gridHeight = m_height * m_CellSize;
         m_OriginPosition = new Vector3((_originPos.x - gridWidth/2) + _cellSize/2, (_originPos.y - gridHeight/2) +_cellSize/2);
@@ -63,7 +63,7 @@ public class Grid
     }
     
     //functions too modify the grid
-    public void SetValue(int x, int y, Tile value)
+    public void SetValue(int x, int y, int value)
     {
         //how we should deal with invalid values like negative numbers
         //we can throw error, correct it to the closest value or ignore it
@@ -76,14 +76,14 @@ public class Grid
         m_gridArray[x, y] = value;
     }
 
-    public void SetValue(Vector3 _worldPosition, Tile value)
+    public void SetValue(Vector3 _worldPosition, int value)
     {
         int x, y;
         GetXY(_worldPosition, out x, out y);
         SetValue(x,y,value);
     }
 
-    public Tile GetValue(int x, int y)
+    public int GetValue(int x, int y)
     {
         
         if (x >=0 && y >= 0 && x < m_width && y < m_height)
@@ -92,11 +92,11 @@ public class Grid
         }
         else
         {
-            return default(Tile);
+            return default(int);
         }
         
     }
-    public Tile GetValue(Vector3 worldPos)
+    public int GetValue(Vector3 worldPos)
     {
         int x, y;
         GetXY(worldPos,out x, out y);
