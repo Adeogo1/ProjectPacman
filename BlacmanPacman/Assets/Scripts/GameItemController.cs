@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class GameItemController : MonoBehaviour
@@ -9,11 +11,18 @@ public class GameItemController : MonoBehaviour
     public int m_Quantity;
     public bool m_Clicked = false;
     private LevelEditorManager m_LevelEditor;
+    public TileSprite m_TileSprite;
     
     void Start()
     {
         m_LevelEditor =
             GameObject.FindGameObjectWithTag("LevelEditorManager").GetComponent<LevelEditorManager>();
+        GetComponent<Button>().onClick.AddListener(ChangeActiveTile);
+    }
+
+    public void ChangeActiveTile()
+    {
+        EventManager.OnChangedActiveTile(m_TileSprite);
     }
 
     public void ButtonClicked()
@@ -32,5 +41,5 @@ public class GameItemController : MonoBehaviour
         shadow.GetComponent<SpriteRenderer>().color = colour;
         m_LevelEditor.ItemClicked(shadow);
     }
-
+    
 }

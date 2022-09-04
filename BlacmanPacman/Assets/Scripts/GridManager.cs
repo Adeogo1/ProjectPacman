@@ -18,8 +18,7 @@ public class GridManager : MonoBehaviour
     public Grid m_Grid;
     public Grid2<Tile> m_Grid2;
 
-    private Tilemap m_Tilemap;
-    public TilemapVisual m_TilemapVisual;
+
     
     void Start()
     {
@@ -107,19 +106,19 @@ public class GridManager : MonoBehaviour
 
     void GenerateGrid3()
     {
-        m_Grid = new Grid(m_Col, m_Rows, m_SquareSize, transform.position);
-        for (int row = 0; row < m_Grid.m_gridArray.GetLength(0); row++)
-        {
-            for (int col = 0; col < m_Grid.m_gridArray.GetLength(1); col++)
-            {
-                // //Gizmos.DrawWireCube(m_Grid.GetWorldPosition(row,col), Vector3.one * m_SquareSize); 
-                // var spawnedTile = Instantiate(m_TilePrefab, transform);
-                // //spawnedTile.Init(false);
-                // spawnedTile.transform.position = m_Grid.GetWorldPosition(row, col);
-                // spawnedTile.transform.localScale *= m_SquareSize;
-
-            }
-        }
+        // m_Grid = new Grid(m_Col, m_Rows, m_SquareSize, transform.position);
+        // for (int row = 0; row < m_Grid.m_gridArray.GetLength(0); row++)
+        // {
+        //     for (int col = 0; col < m_Grid.m_gridArray.GetLength(1); col++)
+        //     {
+        //         // //Gizmos.DrawWireCube(m_Grid.GetWorldPosition(row,col), Vector3.one * m_SquareSize); 
+        //         // var spawnedTile = Instantiate(m_TilePrefab, transform);
+        //         // //spawnedTile.Init(false);
+        //         // spawnedTile.transform.position = m_Grid.GetWorldPosition(row, col);
+        //         // spawnedTile.transform.localScale *= m_SquareSize;
+        //
+        //     }
+        // }
         //m_Grid.CenterGrid();
     }
 

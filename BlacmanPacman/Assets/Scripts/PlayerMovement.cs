@@ -22,16 +22,16 @@ public class PlayerMovement : MonoBehaviour
     {
         //Move();
 
-        float Right =  (m_GridMnager.m_Grid.GetOriginPos().x + m_GridMnager.m_Grid.GetGridXExtent());
-        float Left = (m_GridMnager.m_Grid.GetOriginPos().x - m_GridMnager.m_Grid.GetGridXExtent());
+        // float Right =  (m_GridMnager.m_Grid.GetOriginPos().x + m_GridMnager.m_Grid.GetGridXExtent());
+        // float Left = (m_GridMnager.m_Grid.GetOriginPos().x - m_GridMnager.m_Grid.GetGridXExtent());
+        //
+        // float Up = (m_GridMnager.m_Grid.GetOriginPos().y + m_GridMnager.m_Grid.GetGridYExtent());
+        // float Down =  (m_GridMnager.m_Grid.GetOriginPos().y - m_GridMnager.m_Grid.GetGridYExtent());
         
-        float Up = (m_GridMnager.m_Grid.GetOriginPos().y + m_GridMnager.m_Grid.GetGridYExtent());
-        float Down =  (m_GridMnager.m_Grid.GetOriginPos().y - m_GridMnager.m_Grid.GetGridYExtent());
-        
-        if ((m_MovePoint.position + new Vector3(0, Input.GetAxisRaw("Vertical"), 0)).y > Up || (m_MovePoint.position + new Vector3(0, Input.GetAxisRaw("Vertical"), 0)).y < Down || (m_MovePoint.position + new Vector3(Input.GetAxisRaw("Horizontal"),0,0)).x > Right|| (m_MovePoint.position + new Vector3(Input.GetAxisRaw("Horizontal"),0,0)).x < Left)
-        {
-            return;
-        }
+        // if ((m_MovePoint.position + new Vector3(0, Input.GetAxisRaw("Vertical"), 0)).y > Up || (m_MovePoint.position + new Vector3(0, Input.GetAxisRaw("Vertical"), 0)).y < Down || (m_MovePoint.position + new Vector3(Input.GetAxisRaw("Horizontal"),0,0)).x > Right|| (m_MovePoint.position + new Vector3(Input.GetAxisRaw("Horizontal"),0,0)).x < Left)
+        // {
+        //     return;
+        // }
 
         transform.position = Vector3.MoveTowards(transform.position, m_MovePoint.position, m_Speed * Time.deltaTime);
 

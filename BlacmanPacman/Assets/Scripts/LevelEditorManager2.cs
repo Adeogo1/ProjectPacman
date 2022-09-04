@@ -6,120 +6,105 @@ using UnityEngine;
 public class LevelEditorManager2 : MonoBehaviour
 {
     
+    public Grid m_Grid;
     public int m_Rows, m_Col;
-    public float m_TileSize = 1;
-    public Grid2<Tile> m_Grid;
-    public Grid m_Grid2;
-    public TilemapVisual m_TilemapVisual;
-    public Tile.TilemapSprite m_ActiveTile;
-    private Dictionary<Tile.TilemapSprite, Tile.TileMovementType> m_TileTypesDic = new Dictionary<Tile.TilemapSprite, Tile.TileMovementType>();
-    private Vector3 m_PlayerStartPos;
-    private int m_PlayerCount;
-    private List<Vector3> m_EnemyStartPos = new List<Vector3>();
+    public float m_CellSize = 1;
+    public GameObject m_EmptyTile;
+    public Cell mCell;
+    public Cell mSelectedCell;
+    public TileSprite m_ActiveTile;
+    private List<Vector3> m_EnemyPos;
+    private Vector3 m_PlayerPos;
+    public int m_PlayerCount = 0;
 
-    public GameObject m_TilePrefab;
     void Start()
     {
-        //GenerateGrid2();
-        GenerateGrid();
+        m_Grid.GenerateGrid(m_Rows, m_Col, m_CellSize, m_EmptyTile, mCell);
     }
 
-    private void OnEnable() 
+    private void OnEnable()
+    {
+        EventManager.TileSelected += SelectedTile;
+        EventManager.ChangeActiveTile += ChangeActiveTile;
+    }
+    
+    public void ChangeActiveTile(TileSprite _tileToChange)
     {
         
+        m_ActiveTile = _tileToChange;
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
-        Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        m_Grid.GetXY(pos, out var x, out var y);
-        
-        Tile tileAtPos = m_Grid.GetGridObject(pos);
-        
         if (Input.GetMouseButtonDown(0))
         {
-            if (tileAtPos != null)
-            {
-                if (tileAtPos.GetTileSpriteOne() == Tile.TilemapSprite.NONE)
-                {
-                    tileAtPos.SetTileOne(pos);
-                }else if (m_ActiveTile == Tile.TilemapSprite.PLAYER && m_PlayerCount < 1)
-                {
-                    m_PlayerStartPos = m_Grid.GetWorldPosition(x, y);
-                    tileAtPos.SetTileTwo(pos,m_ActiveTile, m_TileTypesDic[m_ActiveTile]);
-                }else if (m_ActiveTile == Tile.TilemapSprite.ENEMY)
-                {
-                    m_EnemyStartPos.Add( m_Grid.GetWorldPosition(x, y));
-                    tileAtPos.SetTileTwo(pos,m_ActiveTile, m_TileTypesDic[m_ActiveTile]);
-                }
-                else
-                {
-                    pos = new Vector3(pos.x + m_TileSize / 2, pos.y + m_TileSize / 2);
-                     tileAtPos.SetTileTwo(pos,m_ActiveTile, m_TileTypesDic[m_ActiveTile]);
-                    m_TilemapVisual.AddIleVisual(tileAtPos);
-                }
-            }
+            print(mSelectedCell.x + " " + mSelectedCell.y);
+            RemovingTiles(); 
+            AddingTiles();
+
         }
-        else if(Input.GetMouseButtonDown(1))
+
+        if (Input.GetMouseButtonDown(1))
         {
-            if (tileAtPos.GetTileSpriteTwo() == Tile.TilemapSprite.PLAYER)
-            {
-                m_PlayerStartPos = Vector3.positiveInfinity;
-            }
-
-            else if (tileAtPos.GetTileSpriteTwo() == Tile.TilemapSprite.ENEMY)
-            {
-                m_EnemyStartPos.Remove(m_Grid.GetWorldPosition(x, y)); 
-            } 
-            tileAtPos?.RemoveTile(pos);
+            RemovingTiles();
         }
-    }
 
-    void GenerateGrid()
-    {
-        m_Grid = new Grid2<Tile>(m_Col, m_Rows, m_TileSize, Vector3.zero, (Grid2<Tile>g, int x, int y) => new Tile(g,x,y));
-        m_PlayerCount = 0;
-        m_TilemapVisual.InitGrid(m_Grid);
-        ChangeActiveTile(Tile.TilemapSprite.NONE);
-        m_TileTypesDic.Add(Tile.TilemapSprite.NONE,Tile.TileMovementType.NONE);
-        m_TileTypesDic.Add(Tile.TilemapSprite.BLOCK,Tile.TileMovementType.NONWALKABLE);
-        m_TileTypesDic.Add(Tile.TilemapSprite.GATETILE,Tile.TileMovementType.NONWALKABLE);
-        m_TileTypesDic.Add(Tile.TilemapSprite.BACKGROUND,Tile.TileMovementType.WALKABLE);
-
-    }
-
-    void GenerateGrid2()
-    {
-        m_Grid2 = new Grid(m_Col, m_Rows, m_TileSize, transform.position);
-        for (int row = 0; row < m_Grid2.m_gridArray.GetLength(0); row++)
-        {
-            for (int col = 0; col < m_Grid2.m_gridArray.GetLength(1); col++)
-            {
-                //Gizmos.DrawWireCube(m_Grid.GetWorldPosition(row,col), Vector3.one * m_SquareSize); 
-                var spawnedTile = Instantiate(m_TilePrefab, transform);
-                //spawnedTile.Init(false);
-                spawnedTile.transform.position = m_Grid2.GetWorldPosition(row, col);
-                spawnedTile.transform.localScale *= m_TileSize;
-
-            }
-        }
-    }
-    
-    
-    
-    public void ChangeActiveTile(Tile.TilemapSprite _newActiveTile)
-    {
-        m_ActiveTile = _newActiveTile;
-    }
-
-    public void ChangeTileInGridVisual()
-    {
         
     }
+
+    private void SelectedTile(int x, int y)
+    {
+        //print(x + " and " + y);
+        mSelectedCell = m_Grid.GetGridObject(x, y);
+    }
+
+    private void RemovingTiles()
+    {
+        TileSprite tile1, tile2;
+        mSelectedCell.GetTiles(out tile1, out tile2);
+        if (tile2 == TileSprite.ENEMY || tile2 == TileSprite.ENEMY2 || tile2 == TileSprite.ENEMY3 ||tile2 == TileSprite.ENEMY4 )
+        {
+            m_Grid.RemoveEnemyPos(mSelectedCell.GetTilePos());
+        }
+        else if (tile2 == TileSprite.PLAYER)
+        {
+            m_PlayerCount--;
+            m_Grid.SetPlayerPos(new Vector3(10000,10000));
+        }
+        mSelectedCell.RemoveTile();
+    }
+
+    private void AddingTiles()
+    {
+        if (!mSelectedCell.MouseOnTile())
+        {
+            return;
+        }
+        if (m_ActiveTile == TileSprite.BACKGROUND)
+        { 
+            mSelectedCell.SetTile(m_ActiveTile, TileTransportType.WALKABLE);
+        }else if (m_ActiveTile == TileSprite.ENEMY)
+        {
+            mSelectedCell.SetTile(m_ActiveTile, TileTransportType.WALKABLE);
+            m_Grid.AddEnemyPos(mSelectedCell.GetTilePos());
+        }else if (m_ActiveTile == TileSprite.PLAYER && m_PlayerCount <= 0)
+        {
+            mSelectedCell.SetTile(m_ActiveTile, TileTransportType.WALKABLE);
+            m_Grid.SetPlayerPos( mSelectedCell.GetTilePos());
+            m_PlayerCount++;
+            return;
+        }
+        else if(m_ActiveTile != TileSprite.PLAYER )
+        {
+            TileTransportType transportType = m_ActiveTile == TileSprite.BLOCK  ? TileTransportType.NONEWALKABLE : TileTransportType.WALKABLE;
+            mSelectedCell.SetTile(m_ActiveTile, transportType);
+        }
+    }
+
 
     private void OnDisable()
     {
-        
+        EventManager.TileSelected -= SelectedTile;
+        EventManager.ChangeActiveTile -= ChangeActiveTile;
     }
 }
